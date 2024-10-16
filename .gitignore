@@ -163,3 +163,5 @@ cython_debug/
 #.idea/
 .flake8
 .mypy
+Dockerfile
+docker-compose.yml
