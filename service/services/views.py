@@ -2,8 +2,17 @@ from django.shortcuts import render
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Subscription
 from .serializers import SubscriptionSerializer
+from clients.models import Client
+from django.db.models import Prefetch
 
 
 class SubscriptionView(ReadOnlyModelViewSet):
-    queryset = Subscription.objects.all()
+    queryset = Subscription.objects.all().prefetch_related(
+        Prefetch(
+            "client",
+            queryset=Client.objects.all()
+            .select_related("user")
+            .only("company_name", "user__email"),
+        )
+    )
     serializer_class = SubscriptionSerializer
